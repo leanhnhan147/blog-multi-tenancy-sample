@@ -1,31 +1,41 @@
 package se.callista.blog.service.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.database.rider.core.api.dataset.DataSet;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.callista.blog.service.annotation.SpringBootDbIntegrationTest;
 import se.callista.blog.service.domain.entity.Product;
-import se.callista.blog.service.multi_tenancy.util.TenantContext;
+import se.callista.blog.service.multitenancy.util.TenantContext;
+import se.callista.blog.service.persistence.MySQLTestContainer;
 import se.callista.blog.service.persistence.PostgresqlTestContainer;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import se.callista.blog.service.util.DatabaseInitializer;
 
 @Testcontainers
 @SpringBootDbIntegrationTest
 class ProductRepositoryTest {
 
     @Container
-    private static final PostgresqlTestContainer POSTGRESQL_CONTAINER = PostgresqlTestContainer.getInstance();
+    private static final MySQLTestContainer POSTGRESQL_CONTAINER = MySQLTestContainer.getInstance();
+
+    @Autowired
+    private DatabaseInitializer databaseInitializer;
 
     @Autowired
     private ProductRepository productRepository;
 
+    @BeforeEach
+    @DataSet(value = {"tenants.yml"})
+    public void initialize() throws Exception {
+        databaseInitializer.ensureInitialized();
+    }
+
     @Test
-    @DataSet(value = {"products.yml"})
     public void findByIdForTenant1() {
 
         TenantContext.setTenantId("tenant1");
@@ -37,7 +47,6 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DataSet(value = {"products.yml"})
     public void findByIdForTenant2() {
 
         TenantContext.setTenantId("tenant2");

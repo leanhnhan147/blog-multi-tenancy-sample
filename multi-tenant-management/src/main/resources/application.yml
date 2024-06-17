@@ -1,0 +1,26 @@
+server:
+  port: 8088
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+multitenancy:
+  master:
+    datasource:
+      url: jdbc:mysql://localhost:3306/master
+      username: root
+      password: 123456@a
+    liquibase:
+      changeLog: classpath:db/changelog/db.changelog-master.yaml
+  tenant:
+    datasource:
+      url-prefix: jdbc:mysql://localhost:3306/
+    liquibase:
+      changeLog: classpath:db/changelog/db.changelog-tenant.yaml
+encryption:
+  secret: verySecret
+  salt: jozo

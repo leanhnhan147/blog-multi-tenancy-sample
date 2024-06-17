@@ -1,6 +1,10 @@
 package se.callista.blog.service.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,21 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 import se.callista.blog.service.model.ProductValue;
 import se.callista.blog.service.services.ProductService;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/")
-public class ProductApiController extends AbstractBaseApiController {
+public class ProductApiController {
 
     private final ProductService productService;
-
-    @Autowired
-    public ProductApiController(ProductService productService) {
-        this.productService = productService;
-    }
 
     @GetMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ProductValue>> getProducts() {
@@ -50,7 +45,7 @@ public class ProductApiController extends AbstractBaseApiController {
         }
     }
 
-    @PostMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/products",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductValue> createProduct(@Valid @RequestBody ProductValue productValue) {
         ProductValue product = productService.createProduct(productValue);
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();

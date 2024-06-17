@@ -4,17 +4,38 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: none
     open-in-view: false
-    show-sql: true
 multitenancy:
+  datasource-cache:
+    maximumSize: 100
+    expireAfterAccess: 10
   master:
+    repository:
+      packages: se.callista.blog.service.multitenancy.repository
+    entityManager:
+      packages: se.callista.blog.service.multitenancy.domain
     datasource:
-      url: jdbc:mysql://localhost:3306/blog
+      url: jdbc:mysql://localhost:3306/master
       username: root
       password: 123456@a
     liquibase:
-      enabled: true
+      enabled: false
+  tenant:
+    repository:
+      packages: se.callista.blog.service.repository
+    entityManager:
+      packages: se.callista.blog.service.domain
+    datasource:
+      url-prefix: jdbc:mysql://localhost:3306/
+      hikari:
+        maximumPoolSize: 2
+        minimumIdle: 0
+        idleTimeout: 30000
+    liquibase:
       changeLog: classpath:db/changelog/db.changelog-tenant.yaml
+encryption:
+  secret: verySecret
+  salt: jozo

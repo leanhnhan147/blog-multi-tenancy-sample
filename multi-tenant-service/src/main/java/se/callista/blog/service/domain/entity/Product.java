@@ -1,10 +1,5 @@
 package se.callista.blog.service.domain.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,13 +9,16 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "product")
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
 public class Product {
 
     @Builder
@@ -32,7 +30,7 @@ public class Product {
 
     @Id
     @Column(name = "id", unique = true, nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     protected Long id;
 
     @Column(name = "name", length = 255, nullable = false)
@@ -43,4 +41,5 @@ public class Product {
     @Version
     @Column(name = "version", nullable = false, columnDefinition = "int default 0")
     protected Integer version;
+
 }
