@@ -1,0 +1,27 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: product
+      author: bjobes
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: branch_pkey
+                    # Loại bỏ defaultValueNumeric cho cột id
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: 0
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
